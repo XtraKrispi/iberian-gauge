@@ -1,9 +1,14 @@
 module Main exposing (main)
 
+import Board
 import Browser
 import Browser.Navigation as Nav
 import Html exposing (..)
 import Html.Attributes exposing (class)
+import Model exposing (Hex(..), Round, RoundProgress(..), RoundType(..))
+import Set
+import Svg
+import Svg.Attributes
 import Url
 
 
@@ -17,6 +22,26 @@ main =
         , onUrlRequest = UrlRequested
         , onUrlChange = UrlChanged
         }
+
+
+rounds : List Round
+rounds =
+    let
+        stockRound =
+            Round StockRound NotReached
+
+        buildRound =
+            Round BuildRound NotReached
+    in
+    [ stockRound
+    , buildRound
+    , stockRound
+    , buildRound
+    , buildRound
+    , stockRound
+    , buildRound
+    , buildRound
+    ]
 
 
 type alias Model =
@@ -68,9 +93,11 @@ subscriptions model =
 
 view : Model -> Browser.Document Msg
 view model =
-    { title = "Application Title"
+    { title = "Iberian Gauge"
     , body =
-        [ div [ class "p-4" ]
-            [ text "New Application" ]
+        [ div [ class "h-screen w-screen" ]
+            [ Svg.svg [ Svg.Attributes.class "h-full w-full" ]
+                []
+            ]
         ]
     }
