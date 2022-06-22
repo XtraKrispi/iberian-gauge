@@ -6,10 +6,6 @@ import Model exposing (Hex(..), Occupied(..))
 import Set
 
 
-blah =
-    0
-
-
 emptyHex : Html msg
 emptyHex =
     Html.div
@@ -30,7 +26,7 @@ hex attrs h =
         Easy _ ->
             Html.div
                 ([ Html.Attributes.style "clip-path" "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)"
-                 , Html.Attributes.class "relative inline-block w-[96px] h-[83px] bg-black"
+                 , Html.Attributes.class "relative inline-block w-[96px] h-[83px] bg-white"
                  ]
                     ++ attrs
                 )
@@ -44,7 +40,7 @@ hex attrs h =
         Difficult _ ->
             Html.div
                 ([ Html.Attributes.style "clip-path" "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)"
-                 , Html.Attributes.class "relative inline-block w-[96px] h-[83px] bg-black"
+                 , Html.Attributes.class "relative inline-block w-[96px] h-[83px] bg-white"
                  ]
                     ++ attrs
                 )
@@ -63,7 +59,7 @@ hex attrs h =
         Urban { name } ->
             Html.div
                 ([ Html.Attributes.style "clip-path" "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)"
-                 , Html.Attributes.class "relative inline-block w-[96px] h-[83px] bg-black"
+                 , Html.Attributes.class "relative inline-block w-[96px] h-[83px] bg-black z-10"
                  ]
                     ++ attrs
                 )
@@ -77,7 +73,7 @@ hex attrs h =
         City { name } ->
             Html.div
                 ([ Html.Attributes.style "clip-path" "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)"
-                 , Html.Attributes.class "relative inline-block w-[96px] h-[83px] bg-black"
+                 , Html.Attributes.class "relative inline-block w-[96px] h-[83px] bg-red-500 z-10"
                  ]
                     ++ attrs
                 )

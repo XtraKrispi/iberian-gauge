@@ -5,11 +5,7 @@ import Browser
 import Browser.Navigation as Nav
 import Html exposing (..)
 import Html.Attributes exposing (class)
-import Json.Encode as Json
 import Model exposing (Hex(..), Occupied(..), Round, RoundProgress(..), RoundType(..))
-import Set
-import Svg
-import Svg.Attributes
 import Url
 
 
@@ -106,7 +102,7 @@ hexRow row hs =
                         Board.emptyHex
 
                     Occupied h ->
-                        Board.hex [ class "hover:scale-150 hover:z-10" ] h
+                        Board.hex [ class "hover:scale-150 hover:z-20" ] h
             )
             hs
         )
