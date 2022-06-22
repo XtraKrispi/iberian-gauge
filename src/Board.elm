@@ -4,6 +4,7 @@ import Html exposing (Html)
 import Html.Attributes
 import Model exposing (Hex(..), Occupied(..))
 import Set
+import Utils
 
 
 emptyHex : Html msg
@@ -22,17 +23,49 @@ emptyHex =
 
 hex : List (Html.Attribute msg) -> Hex -> Html msg
 hex attrs h =
+    let
+        hexWidth =
+            "w-[96px]"
+
+        innerHexWidth =
+            "w-[94px]"
+
+        innerInnerHexWidth =
+            "w-[80px]"
+
+        hexHeight =
+            "h-[83px]"
+
+        innerHexHeight =
+            "h-[81px]"
+
+        innerInnerHexHeight =
+            "h-[67px]"
+    in
     case h of
         Easy _ ->
             Html.div
                 ([ Html.Attributes.style "clip-path" "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)"
-                 , Html.Attributes.class "relative inline-block w-[96px] h-[83px] bg-white"
+                 , Utils.classes
+                    [ "relative"
+                    , "inline-block"
+                    , hexWidth
+                    , hexHeight
+                    , "bg-white"
+                    ]
                  ]
                     ++ attrs
                 )
                 [ Html.div
                     [ Html.Attributes.style "clip-path" "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)"
-                    , Html.Attributes.class "absolute top-[1px] left-[1px] w-[94px] h-[81px] bg-[#91f2c2]"
+                    , Utils.classes
+                        [ "absolute"
+                        , "top-[1px]"
+                        , "left-[1px]"
+                        , innerHexWidth
+                        , innerHexHeight
+                        , "bg-[#91f2c2]"
+                        ]
                     ]
                     []
                 ]
@@ -40,17 +73,38 @@ hex attrs h =
         Difficult _ ->
             Html.div
                 ([ Html.Attributes.style "clip-path" "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)"
-                 , Html.Attributes.class "relative inline-block w-[96px] h-[83px] bg-white"
+                 , Utils.classes
+                    [ "relative"
+                    , "inline-block"
+                    , hexWidth
+                    , hexHeight
+                    , "bg-white"
+                    ]
                  ]
                     ++ attrs
                 )
                 [ Html.div
                     [ Html.Attributes.style "clip-path" "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)"
-                    , Html.Attributes.class "absolute top-[1px] left-[1px] w-[94px] h-[81px] bg-[#91f2c2]"
+                    , Utils.classes
+                        [ "absolute"
+                        , "top-[1px]"
+                        , "left-[1px]"
+                        , innerHexWidth
+                        , innerHexHeight
+                        , "bg-[#91f2c2]"
+                        ]
                     ]
                     [ Html.div
                         [ Html.Attributes.style "clip-path" "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)"
-                        , Html.Attributes.class "absolute top-[7px] left-[7px] w-[80px] h-[67px] opacity-50 bg-[#0a6b3b]"
+                        , Utils.classes
+                            [ "absolute"
+                            , "top-[7px]"
+                            , "left-[7px]"
+                            , innerInnerHexWidth
+                            , innerInnerHexHeight
+                            , "opacity-50"
+                            , "bg-[#0a6b3b]"
+                            ]
                         ]
                         []
                     ]
@@ -59,13 +113,30 @@ hex attrs h =
         Urban { name } ->
             Html.div
                 ([ Html.Attributes.style "clip-path" "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)"
-                 , Html.Attributes.class "relative inline-block w-[96px] h-[83px] bg-black z-10"
+                 , Utils.classes
+                    [ "relative"
+                    , "inline-block"
+                    , hexWidth
+                    , hexHeight
+                    , "bg-black"
+                    , "z-10"
+                    ]
                  ]
                     ++ attrs
                 )
                 [ Html.div
                     [ Html.Attributes.style "clip-path" "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)"
-                    , Html.Attributes.class "absolute top-[1px] left-[1px] w-[94px] h-[81px] bg-[#567D84] flex justify-center items-end"
+                    , Utils.classes
+                        [ "absolute"
+                        , "top-[1px]"
+                        , "left-[1px]"
+                        , innerHexWidth
+                        , innerHexHeight
+                        , "bg-[#567D84]"
+                        , "flex"
+                        , "justify-center"
+                        , "items-end"
+                        ]
                     ]
                     [ Html.span [ Html.Attributes.class "text-white mb-3 text-sm" ] [ Html.text name ] ]
                 ]
@@ -73,13 +144,30 @@ hex attrs h =
         City { name } ->
             Html.div
                 ([ Html.Attributes.style "clip-path" "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)"
-                 , Html.Attributes.class "relative inline-block w-[96px] h-[83px] bg-red-500 z-10"
+                 , Utils.classes
+                    [ "relative"
+                    , "inline-block"
+                    , hexWidth
+                    , hexHeight
+                    , "bg-red-500"
+                    , "z-10"
+                    ]
                  ]
                     ++ attrs
                 )
                 [ Html.div
                     [ Html.Attributes.style "clip-path" "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)"
-                    , Html.Attributes.class "absolute top-[1px] left-[1px] w-[94px] h-[81px] bg-[#824a4a] flex justify-center items-end"
+                    , Utils.classes
+                        [ "absolute"
+                        , "top-[1px]"
+                        , "left-[1px]"
+                        , innerHexWidth
+                        , innerHexHeight
+                        , "bg-[#824a4a]"
+                        , "flex"
+                        , "justify-center"
+                        , "items-end"
+                        ]
                     ]
                     [ Html.span [ Html.Attributes.class "text-white mb-3 text-sm" ] [ Html.text name ] ]
                 ]

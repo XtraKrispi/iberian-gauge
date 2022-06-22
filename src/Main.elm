@@ -112,8 +112,10 @@ view : Model -> Browser.Document Msg
 view model =
     { title = "Iberian Gauge"
     , body =
-        [ div [ class "h-screen w-screen" ] <|
-            [ Html.div [ class "scale-50 origin-top-left ml-5 mt-5" ]
+        [ div [ class "flex m-10" ] <|
+            [ Html.div [] [ Html.text "Companies" ]
+            , Html.div [] [ Html.text "Dividend Track" ]
+            , Html.div [ class "origin-top-left" ]
                 (List.indexedMap hexRow Board.hexGrid)
             ]
         ]
