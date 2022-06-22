@@ -5,7 +5,8 @@ import Browser
 import Browser.Navigation as Nav
 import Html exposing (..)
 import Html.Attributes exposing (class)
-import Model exposing (Hex(..), Round, RoundProgress(..), RoundType(..))
+import Json.Encode as Json
+import Model exposing (Hex(..), Occupied(..), Round, RoundProgress(..), RoundType(..))
 import Set
 import Svg
 import Svg.Attributes
@@ -91,13 +92,33 @@ subscriptions model =
     Sub.none
 
 
+hexRow : Int -> List (Occupied Hex) -> Html Msg
+hexRow row hs =
+    Html.div
+        [ Html.Attributes.attribute "data-row-num" (String.fromInt row)
+        , Html.Attributes.class "flex space-x-[46px]"
+        , Html.Attributes.classList [ ( "ml-[71px]", modBy 2 row /= 0 ), ( "mt-[-43px]", row /= 0 ) ]
+        ]
+        (List.map
+            (\d ->
+                case d of
+                    Empty ->
+                        Board.emptyHex
+
+                    Occupied h ->
+                        Board.hex [ class "hover:scale-150 hover:z-10" ] h
+            )
+            hs
+        )
+
+
 view : Model -> Browser.Document Msg
 view model =
     { title = "Iberian Gauge"
     , body =
-        [ div [ class "h-screen w-screen" ]
-            [ Svg.svg [ Svg.Attributes.class "h-full w-full" ]
-                []
+        [ div [ class "h-screen w-screen" ] <|
+            [ Html.div [ class "scale-50 origin-top-left ml-5 mt-5" ]
+                (List.indexedMap hexRow Board.hexGrid)
             ]
         ]
     }
