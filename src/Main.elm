@@ -218,7 +218,8 @@ viewDividend dividend =
                     , "items-center"
                     ]
                 ]
-                [ Html.span [ Utils.classes [ "text-xl" ] ] [ Html.text (String.fromInt amt) ]
+                [ Html.span [ Utils.classes [ "text-xl" ] ]
+                    [ Html.text ("P" ++ String.fromInt amt) ]
                 , Html.div [ Utils.classes [ "flex", "space-x-1" ] ]
                     (List.map (\c -> Html.div [ Utils.classes [ "w-4", "h-4", "rounded-full", "border-[1px]", companyColor c ] ] []) colors)
                 ]
@@ -332,9 +333,54 @@ view model =
                         , "flex"
                         , "flex-col"
                         , "items-center"
+                        , "space-y-10"
                         ]
                     ]
-                    [ Html.div [] [ Html.text "Share track" ]
+                    [ Html.div [ Utils.classes [ "w-full" ] ]
+                        [ Html.div [ Utils.classes [ "absolute", "flex", "space-x-10", "-translate-y-3", "ml-24" ] ]
+                            [ Html.div
+                                [ Utils.classes
+                                    [ "w-10"
+                                    , "bg-green-200"
+                                    , "h-32"
+                                    ]
+                                ]
+                                []
+                            , Html.div
+                                [ Utils.classes
+                                    [ "w-10"
+                                    , "bg-green-200"
+                                    , "h-32"
+                                    ]
+                                ]
+                                []
+                            , Html.div
+                                [ Utils.classes
+                                    [ "w-10"
+                                    , "bg-green-200"
+                                    , "h-32"
+                                    ]
+                                ]
+                                []
+                            ]
+
+                        -- Behind bar
+                        , Html.div
+                            [ Utils.classes
+                                [ "h-24"
+                                , "bg-[#D0AA82]"
+                                , "w-full"
+                                , "rounded-lg"
+                                , "pl-4"
+                                , "flex"
+                                , "items-center"
+                                ]
+                            ]
+                            [ Html.div [ Utils.classes [] ]
+                                [ Board.chart [ Svg.Attributes.class "w-16" ]
+                                ]
+                            ]
+                        ]
                     , Html.div [] (List.indexedMap hexRow Board.hexGrid)
                     ]
                 ]
