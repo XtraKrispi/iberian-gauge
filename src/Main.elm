@@ -248,7 +248,7 @@ viewDividend dividend =
                     [ Utils.classes
                         [ "absolute"
                         , "right-2"
-                        , "bottom-[-1.75rem]"
+                        , "-bottom-8"
                         , "h-10"
                         , "w-10"
                         , "bg-[#D0AA82]"
