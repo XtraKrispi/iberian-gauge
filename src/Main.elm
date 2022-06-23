@@ -337,32 +337,17 @@ view model =
                         ]
                     ]
                     [ Html.div [ Utils.classes [ "w-full" ] ]
-                        [ Html.div [ Utils.classes [ "absolute", "flex", "space-x-10", "-translate-y-3", "ml-24" ] ]
-                            [ Html.div
-                                [ Utils.classes
-                                    [ "w-10"
-                                    , "bg-green-200"
-                                    , "h-32"
-                                    ]
+                        [ Html.div
+                            [ Utils.classes
+                                [ "absolute"
+                                , "flex"
+                                , "justify-around"
+                                , "-translate-y-3"
+                                , "ml-24"
+                                , "w-full"
                                 ]
-                                []
-                            , Html.div
-                                [ Utils.classes
-                                    [ "w-10"
-                                    , "bg-green-200"
-                                    , "h-32"
-                                    ]
-                                ]
-                                []
-                            , Html.div
-                                [ Utils.classes
-                                    [ "w-10"
-                                    , "bg-green-200"
-                                    , "h-32"
-                                    ]
-                                ]
-                                []
                             ]
+                            []
 
                         -- Behind bar
                         , Html.div
@@ -376,8 +361,35 @@ view model =
                                 , "items-center"
                                 ]
                             ]
-                            [ Html.div [ Utils.classes [] ]
+                            [ Html.div
+                                [ Utils.classes
+                                    [ "flex"
+                                    , "space-x-3"
+                                    , "w-full"
+                                    , "justify-between"
+                                    ]
+                                ]
                                 [ Board.chart [ Svg.Attributes.class "w-16" ]
+                                , Html.div
+                                    [ Utils.classes
+                                        [ "flex"
+                                        , "justify-between"
+                                        , "w-full"
+                                        ]
+                                    ]
+                                    (List.repeat 20
+                                        (Html.div
+                                            [ Utils.classes
+                                                [ "w-14"
+                                                , "bg-[#AFABAF]"
+                                                , "h-32"
+                                                , "rounded-lg"
+                                                , "border-2"
+                                                ]
+                                            ]
+                                            []
+                                        )
+                                    )
                                 ]
                             ]
                         ]
