@@ -1,5 +1,7 @@
 module Model exposing (..)
 
+import Dict exposing (Dict)
+import SelectList exposing (SelectList)
 import Set exposing (Set)
 
 
@@ -43,7 +45,7 @@ type Share
 type alias Company =
     { id : CompanyId
     , trains : Int
-    , shares : List Share
+    , shares : SelectList Share
     }
 
 
@@ -61,3 +63,12 @@ type alias Coord =
 type Occupied a
     = Occupied a
     | Empty
+
+
+type alias DividendLevel =
+    { purpleYellowAmount : Int
+    , blueOrangeAmount : Int
+    , redAmount : Int
+    , hasShareBump : Bool
+    , companies : List CompanyId
+    }
