@@ -5,7 +5,7 @@ import Browser
 import Browser.Navigation as Nav
 import Html exposing (..)
 import Html.Attributes exposing (class)
-import Model exposing (Company, CompanyId(..), DividendLevel, Hex(..), Occupied(..), PlayerId(..), Round, RoundProgress(..), RoundType(..), Share(..))
+import Model exposing (Company, CompanyId(..), DividendLevel, Hex(..), Occupied(..), PlayerId(..), Round, RoundProgress(..), RoundType(..), Share(..), SharePrice)
 import Random
 import Random.List
 import SelectList exposing (Position(..), SelectList)
@@ -51,6 +51,7 @@ type alias Model =
     , url : Url.Url
     , companies : SelectList Company
     , dividends : List DividendLevel
+    , sharePrices : List SharePrice
     , seed : Random.Seed
     }
 
@@ -67,6 +68,7 @@ init _ url key =
               , url = url
               , companies = SelectList.fromLists [] c cs_
               , dividends = Board.dividends
+              , sharePrices = Board.sharePrices
               , seed = seed
               }
             , Cmd.none
@@ -78,6 +80,7 @@ init _ url key =
               , url = url
               , companies = SelectList.fromLists [] (Company CompanyPurple 0 (SelectList.fromLists [] Unclaimed (List.repeat 1 Unclaimed))) []
               , dividends = Board.dividends
+              , sharePrices = Board.sharePrices
               , seed = seed
               }
             , Cmd.none
@@ -283,6 +286,48 @@ viewDividend dividend =
         ]
 
 
+viewSharePrice : SharePrice -> Html msg
+viewSharePrice sp =
+    Html.div
+        [ Utils.classes
+            [ "w-14"
+            , "bg-[#AFABAF]"
+            , "h-32"
+            , "rounded-lg"
+            , "border-2"
+            , "flex"
+            , "flex-col"
+            , "items-center"
+            , "justify-end"
+            , "relative"
+            ]
+        , Html.Attributes.classList
+            [ ( "h-40 bg-[#678D8E]"
+              , sp.isStartingPrice
+              )
+            ]
+        ]
+        [ Html.div
+            [ Utils.classes
+                [ "absolute"
+                , "-bottom-8"
+                , "text-white"
+                ]
+            ]
+            [ Html.text (String.fromInt sp.price) ]
+        ]
+
+
+viewCosts : Html msg
+viewCosts =
+    Html.div [] [ Html.text "Costs" ]
+
+
+viewRounds : Html msg
+viewRounds =
+    Html.div [] [ Html.text "Rounds" ]
+
+
 view : Model -> Browser.Document Msg
 view model =
     { title = "Iberian Gauge"
@@ -333,67 +378,47 @@ view model =
                         , "flex"
                         , "flex-col"
                         , "items-center"
-                        , "space-y-10"
+                        , "space-y-20"
                         ]
                     ]
-                    [ Html.div [ Utils.classes [ "w-full" ] ]
-                        [ Html.div
-                            [ Utils.classes
-                                [ "absolute"
-                                , "flex"
-                                , "justify-around"
-                                , "-translate-y-3"
-                                , "ml-24"
-                                , "w-full"
-                                ]
-                            ]
-                            []
-
-                        -- Behind bar
-                        , Html.div
-                            [ Utils.classes
-                                [ "h-24"
-                                , "bg-[#D0AA82]"
-                                , "w-full"
-                                , "rounded-lg"
-                                , "pl-4"
-                                , "flex"
-                                , "items-center"
-                                ]
-                            ]
-                            [ Html.div
-                                [ Utils.classes
-                                    [ "flex"
-                                    , "space-x-3"
-                                    , "w-full"
-                                    , "justify-between"
-                                    ]
-                                ]
-                                [ Board.chart [ Svg.Attributes.class "w-16" ]
-                                , Html.div
-                                    [ Utils.classes
-                                        [ "flex"
-                                        , "justify-between"
-                                        , "w-full"
-                                        ]
-                                    ]
-                                    (List.repeat 20
-                                        (Html.div
-                                            [ Utils.classes
-                                                [ "w-14"
-                                                , "bg-[#AFABAF]"
-                                                , "h-32"
-                                                , "rounded-lg"
-                                                , "border-2"
-                                                ]
-                                            ]
-                                            []
-                                        )
-                                    )
-                                ]
+                    [ Html.div
+                        [ Utils.classes
+                            [ "h-24"
+                            , "bg-[#D0AA82]"
+                            , "w-full"
+                            , "rounded-lg"
+                            , "pl-4"
+                            , "flex"
+                            , "items-center"
                             ]
                         ]
-                    , Html.div [] (List.indexedMap hexRow Board.hexGrid)
+                        [ Html.div
+                            [ Utils.classes
+                                [ "flex"
+                                , "space-x-3"
+                                , "w-full"
+                                , "justify-between"
+                                ]
+                            ]
+                            [ Board.chart [ Svg.Attributes.class "w-16" ]
+                            , Html.div
+                                [ Utils.classes
+                                    [ "flex"
+                                    , "justify-between"
+                                    , "items-center"
+                                    , "w-full"
+                                    ]
+                                ]
+                                (List.map
+                                    viewSharePrice
+                                    model.sharePrices
+                                )
+                            ]
+                        ]
+                    , Html.div [ Utils.classes [ "flex" ] ]
+                        [ Html.div [] (List.indexedMap hexRow Board.hexGrid)
+                        , Html.div [ Utils.classes [ "flex", "flex-col", "justify-between" ] ] [ Html.div [] [], Html.div [] [ viewCosts, viewRounds ] ]
+                        ]
                     ]
                 ]
             ]

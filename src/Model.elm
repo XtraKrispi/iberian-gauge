@@ -72,3 +72,10 @@ type alias DividendLevel =
     , hasShareBump : Bool
     , companies : List CompanyId
     }
+
+
+type alias SharePrice =
+    { price : Int
+    , companies : List CompanyId
+    , isStartingPrice : Bool
+    }
