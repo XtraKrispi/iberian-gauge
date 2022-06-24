@@ -223,8 +223,12 @@ hex attrs h =
                         ]
                     ]
                     [ Html.span
-                        [ Html.Attributes.class
-                            "text-white mb-3 text-[9px]"
+                        [ Utils.classes
+                            [ "text-white"
+                            , "mb-3"
+                            , "text-[9px]"
+                            , "w-[90%]"
+                            ]
                         ]
                         [ Html.text name ]
                     ]
@@ -260,7 +264,16 @@ hex attrs h =
                         , "text-center"
                         ]
                     ]
-                    [ Html.span [ Html.Attributes.class "text-white mb-3 text-[9px]" ] [ Html.text name ] ]
+                    [ Html.span
+                        [ Utils.classes
+                            [ "text-white"
+                            , "mb-3"
+                            , "text-[9px]"
+                            , "w-[90%]"
+                            ]
+                        ]
+                        [ Html.text name ]
+                    ]
                 ]
 
 
