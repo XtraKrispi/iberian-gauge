@@ -310,8 +310,15 @@ viewSharePrice sp =
         [ Html.div
             [ Utils.classes
                 [ "absolute"
-                , "-bottom-8"
-                , "text-white"
+                , "-bottom-10"
+                , "text-black"
+                , "bg-white"
+                , "h-8"
+                , "w-8"
+                , "rounded-full"
+                , "flex"
+                , "justify-center"
+                , "items-center"
                 ]
             ]
             [ Html.text (String.fromInt sp.price) ]
@@ -417,7 +424,14 @@ view model =
                         ]
                     , Html.div [ Utils.classes [ "flex" ] ]
                         [ Html.div [] (List.indexedMap hexRow Board.hexGrid)
-                        , Html.div [ Utils.classes [ "flex", "flex-col", "justify-between" ] ] [ Html.div [] [], Html.div [] [ viewCosts, viewRounds ] ]
+                        , Html.div
+                            [ Utils.classes
+                                [ "flex"
+                                , "flex-col"
+                                , "justify-between"
+                                ]
+                            ]
+                            [ Html.div [] [], Html.div [] [ viewCosts, viewRounds ] ]
                         ]
                     ]
                 ]
