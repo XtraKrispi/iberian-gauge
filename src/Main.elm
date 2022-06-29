@@ -346,7 +346,12 @@ viewRound selected roundType =
                     []
 
             BuildRound ->
-                Html.span [] [ Html.text "B" ]
+                Html.img
+                    [ style "filter" "drop-shadow(2px 1px 0 white) drop-shadow(-1px -1px 0 white)"
+                    , Utils.classes [ "w-8" ]
+                    , src "build-icon.png"
+                    ]
+                    []
         ]
 
 
