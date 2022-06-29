@@ -338,7 +338,12 @@ viewRound selected roundType =
         ]
         [ case roundType of
             StockRound ->
-                Html.img [ style "filter" "drop-shadow(2px 1px 0 white) drop-shadow(-1px -1px 0 white)", Utils.classes [ "w-8" ], src "/stock-icon-2.png" ] []
+                Html.img
+                    [ style "filter" "drop-shadow(2px 1px 0 white) drop-shadow(-1px -1px 0 white)"
+                    , Utils.classes [ "w-8" ]
+                    , src "stock-icon-2.png"
+                    ]
+                    []
 
             BuildRound ->
                 Html.span [] [ Html.text "B" ]
