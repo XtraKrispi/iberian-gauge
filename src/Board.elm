@@ -3,7 +3,7 @@ module Board exposing (..)
 import Dict
 import Html exposing (Html)
 import Html.Attributes
-import Model exposing (Company, CompanyId(..), DividendLevel, Hex(..), Occupied(..), Share(..), SharePrice)
+import Model exposing (Company, CompanyId(..), DividendLevel, Hex(..), Occupied(..), RoundType(..), Share(..), SharePrice)
 import SelectList
 import Set
 import Svg exposing (Svg)
@@ -410,6 +410,22 @@ sharePrices : List SharePrice
 sharePrices =
     List.range 1 20
         |> List.map (\i -> { price = 4 * i, companies = [], isStartingPrice = i > 2 && i < 10 })
+
+
+rounds : ( RoundType, List RoundType )
+rounds =
+    ( StockRound
+    , [ BuildRound
+      , StockRound
+      , BuildRound
+      , BuildRound
+      , StockRound
+      , BuildRound
+      , BuildRound
+      , StockRound
+      , BuildRound
+      ]
+    )
 
 
 hexGrid : List (List (Occupied Hex))

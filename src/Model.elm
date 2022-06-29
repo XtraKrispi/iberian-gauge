@@ -10,17 +10,6 @@ type RoundType
     | BuildRound
 
 
-type RoundProgress
-    = InProgress
-    | NotReached
-
-
-type alias Round =
-    { roundType : RoundType
-    , progress : RoundProgress
-    }
-
-
 type CompanyId
     = CompanyRed
     | CompanyPurple

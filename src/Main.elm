@@ -4,8 +4,9 @@ import Board
 import Browser
 import Browser.Navigation as Nav
 import Html exposing (..)
-import Html.Attributes exposing (class)
-import Model exposing (Company, CompanyId(..), DividendLevel, Hex(..), Occupied(..), PlayerId(..), Round, RoundProgress(..), RoundType(..), Share(..), SharePrice)
+import Html.Attributes exposing (class, classList, src, style)
+import List.Extra
+import Model exposing (Company, CompanyId(..), DividendLevel, Hex(..), Occupied(..), PlayerId(..), RoundType(..), Share(..), SharePrice)
 import Random
 import Random.List
 import SelectList exposing (Position(..), SelectList)
@@ -26,32 +27,13 @@ main =
         }
 
 
-rounds : List Round
-rounds =
-    let
-        stockRound =
-            Round StockRound NotReached
-
-        buildRound =
-            Round BuildRound NotReached
-    in
-    [ stockRound
-    , buildRound
-    , stockRound
-    , buildRound
-    , buildRound
-    , stockRound
-    , buildRound
-    , buildRound
-    ]
-
-
 type alias Model =
     { key : Nav.Key
     , url : Url.Url
     , companies : SelectList Company
     , dividends : List DividendLevel
     , sharePrices : List SharePrice
+    , rounds : SelectList RoundType
     , seed : Random.Seed
     }
 
@@ -69,6 +51,8 @@ init _ url key =
               , companies = SelectList.fromLists [] c cs_
               , dividends = Board.dividends
               , sharePrices = Board.sharePrices
+              , rounds =
+                    SelectList.fromLists [] (Tuple.first Board.rounds) (Tuple.second Board.rounds)
               , seed = seed
               }
             , Cmd.none
@@ -81,6 +65,7 @@ init _ url key =
               , companies = SelectList.fromLists [] (Company CompanyPurple 0 (SelectList.fromLists [] Unclaimed (List.repeat 1 Unclaimed))) []
               , dividends = Board.dividends
               , sharePrices = Board.sharePrices
+              , rounds = SelectList.fromLists [] (Tuple.first Board.rounds) (Tuple.second Board.rounds)
               , seed = seed
               }
             , Cmd.none
@@ -265,7 +250,12 @@ viewDividend dividend =
                     [ Html.div [ Utils.classes [ "absolute" ] ]
                         [ Board.chart [ Svg.Attributes.class "w-6" ]
                         ]
-                    , Html.div [ Utils.classes [ "absolute", "translate-x-[1rem]" ] ]
+                    , Html.div
+                        [ Utils.classes
+                            [ "absolute"
+                            , "translate-x-[1rem]"
+                            ]
+                        ]
                         [ Board.rightGreenArrow [ Svg.Attributes.class "w-9" ] ]
                     ]
 
@@ -321,18 +311,54 @@ viewSharePrice sp =
                 , "items-center"
                 ]
             ]
-            [ Html.text (String.fromInt sp.price) ]
+            [ Html.text ("P" ++ String.fromInt sp.price) ]
         ]
 
 
 viewCosts : Html msg
 viewCosts =
-    Html.div [] [ Html.text "Costs" ]
+    Html.div [ Utils.classes [ "flex-grow-[1]" ] ] [ Html.text "Costs" ]
 
 
-viewRounds : Html msg
-viewRounds =
-    Html.div [] [ Html.text "Rounds" ]
+viewRound : Bool -> RoundType -> Html msg
+viewRound selected roundType =
+    Html.div
+        [ Utils.classes
+            [ "h-12"
+            , "w-12"
+            , "rounded-full"
+            , "border-2"
+            , "text-white"
+            , "flex"
+            , "items-center"
+            , "justify-center"
+            , "transition-all"
+            ]
+        , classList [ ( "border-4 scale-125", selected ) ]
+        ]
+        [ case roundType of
+            StockRound ->
+                Html.img [ style "filter" "drop-shadow(2px 1px 0 white) drop-shadow(-1px -1px 0 white)", Utils.classes [ "w-8" ], src "/stock-icon-2.png" ] []
+
+            BuildRound ->
+                Html.span [] [ Html.text "B" ]
+        ]
+
+
+viewRounds : SelectList RoundType -> Html msg
+viewRounds rounds =
+    rounds
+        |> SelectList.indexedMap_ (\selected _ item -> ( selected, item ))
+        |> List.Extra.groupWhile (\( _, a ) ( _, b ) -> b == BuildRound)
+        |> List.map (\( x, xs ) -> x :: xs)
+        |> List.map
+            (\items ->
+                Html.div [ Utils.classes [ "flex", "flex-col", "space-y-2" ] ]
+                    (items
+                        |> List.map (\( selected, item ) -> viewRound selected item)
+                    )
+            )
+        |> Html.div [ Utils.classes [ "absolute", "-right-80", "bottom-40", "flex", "space-x-10" ] ]
 
 
 view : Model -> Browser.Document Msg
@@ -344,6 +370,8 @@ view model =
                 [ "scale-100"
                 , "flex"
                 , "m-10"
+                , "outline-none"
+                , "select-none"
                 ]
             ]
           <|
@@ -428,10 +456,14 @@ view model =
                             [ Utils.classes
                                 [ "flex"
                                 , "flex-col"
-                                , "justify-between"
+                                , "justify-start"
                                 ]
                             ]
-                            [ Html.div [] [], Html.div [] [ viewCosts, viewRounds ] ]
+                            [ Html.div [ Utils.classes [ "flex-grow-[2]" ] ] []
+                            , viewCosts
+                            , viewRounds model.rounds
+                            , Html.div [ Utils.classes [ "flex-grow-[2]" ] ] []
+                            ]
                         ]
                     ]
                 ]
