@@ -19,15 +19,36 @@ main : Program () Model Msg
 main =
     Browser.application
         { init = init
-        , view = view
-        , update = update
+        , view =
+            \model ->
+                case model of
+                    Invalid ->
+                        { title = "Oops"
+                        , body = [ Html.div [] [ Html.text "Something broke" ] ]
+                        }
+
+                    Valid m ->
+                        view m
+        , update =
+            \msg model ->
+                case model of
+                    Invalid ->
+                        ( model, Cmd.none )
+
+                    Valid m ->
+                        Tuple.mapFirst Valid (update msg m)
         , subscriptions = subscriptions
         , onUrlRequest = UrlRequested
         , onUrlChange = UrlChanged
         }
 
 
-type alias Model =
+type Model
+    = Invalid
+    | Valid MainModel
+
+
+type alias MainModel =
     { key : Nav.Key
     , url : Url.Url
     , companies : SelectList Company
@@ -44,32 +65,24 @@ init _ url key =
         ( cs, seed ) =
             Random.step (Random.List.shuffle Board.companies) (Random.initialSeed 0)
     in
-    case cs of
-        c :: cs_ ->
-            ( { key = key
-              , url = url
-              , companies = SelectList.fromLists [] c cs_
-              , dividends = Board.dividends
-              , sharePrices = Board.sharePrices
-              , rounds =
-                    SelectList.fromLists [] (Tuple.first Board.rounds) (Tuple.second Board.rounds)
-              , seed = seed
-              }
-            , Cmd.none
+    cs
+        |> SelectList.fromList
+        |> Maybe.map
+            (\companies ->
+                ( Valid
+                    { key = key
+                    , url = url
+                    , companies = companies
+                    , dividends = Board.dividends
+                    , sharePrices = Board.sharePrices
+                    , rounds =
+                        SelectList.fromLists [] (Tuple.first Board.rounds) (Tuple.second Board.rounds)
+                    , seed = seed
+                    }
+                , Cmd.none
+                )
             )
-
-        _ ->
-            -- This shouldn't happen because of the pre-seeded companies
-            ( { key = key
-              , url = url
-              , companies = SelectList.fromLists [] (Company CompanyPurple 0 (SelectList.fromLists [] Unclaimed (List.repeat 1 Unclaimed))) []
-              , dividends = Board.dividends
-              , sharePrices = Board.sharePrices
-              , rounds = SelectList.fromLists [] (Tuple.first Board.rounds) (Tuple.second Board.rounds)
-              , seed = seed
-              }
-            , Cmd.none
-            )
+        |> Maybe.withDefault ( Invalid, Cmd.none )
 
 
 type Msg
@@ -79,7 +92,7 @@ type Msg
     | UrlChanged Url.Url
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
+update : Msg -> MainModel -> ( MainModel, Cmd Msg )
 update msg model =
     case msg of
         Msg1 ->
@@ -371,7 +384,7 @@ viewRounds rounds =
         |> Html.div [ Utils.classes [ "absolute", "-right-80", "bottom-40", "flex", "space-x-10" ] ]
 
 
-view : Model -> Browser.Document Msg
+view : MainModel -> Browser.Document Msg
 view model =
     { title = "Iberian Gauge"
     , body =
